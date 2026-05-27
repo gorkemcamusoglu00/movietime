@@ -1,40 +1,32 @@
-package org.example.movietime.entity;
+package org.example.movietime.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-@Entity
-public class movie {
+public class MovieRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @NotBlank(message = "Title cannot be empty")
+    @Size(min = 2, max = 100)
     private String title;
 
+    @NotBlank(message = "Description cannot be empty")
+    @Size(min = 10, max = 500)
     private String description;
 
+    @NotBlank(message = "Genre cannot be empty")
     private String genre;
 
+    @Min(value = 1900, message = "Release year must be after 1900")
+    @Max(value = 2026, message = "Release year is invalid")
     private Integer releaseYear;
 
+    @Min(value = 1, message = "Rating must be at least 1")
+    @Max(value = 10, message = "Rating cannot be greater than 10")
     private Double rating;
 
-    public movie() {
-    }
-
-    public movie(Long id, String title, String description,
-                 String genre, Integer releaseYear, Double rating) {
-
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.genre = genre;
-        this.releaseYear = releaseYear;
-        this.rating = rating;
-    }
-
-    public Long getId() {
-        return id;
+    public MovieRequest() {
     }
 
     public String getTitle() {
