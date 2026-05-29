@@ -1,0 +1,79 @@
+package org.example.movietime.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+
+                .headers(headers -> headers
+                        .frameOptions(frameOptions -> frameOptions.sameOrigin())
+                )
+
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                .authorizeHttpRequests(auth -> auth
+
+                        .requestMatchers("/h2-console/**").permitAll()
+
+                        // Herkes film listesini ve detayını görebilir
+                        .requestMatchers(HttpMethod.GET, "/movies/**").hasAnyRole("USER", "ADMIN")
+
+                        // Sadece ADMIN film ekleyebilir, güncelleyebilir, silebilir
+                        .requestMatchers(HttpMethod.POST, "/movies/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/movies/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/movies/**").hasRole("ADMIN")
+
+                        .anyRequest().authenticated()
+                )
+
+                .httpBasic(Customizer.withDefaults())
+
+                .build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+
+        UserDetails user = User.builder()
+                .username("user")
+                .password(passwordEncoder.encode("1234"))
+                .roles("USER")
+                .build();
+
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password(passwordEncoder.encode("admin123"))
+                .roles("ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, admin);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
