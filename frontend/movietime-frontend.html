@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MovieTime</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: #0a0a0f; color: #e8e4dc; min-height: 100vh; }
+
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.07);
+    background: rgba(10,10,15,0.95); position: sticky; top: 0; z-index: 100;
+  }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px; color: #e8c97e; }
+  .auth-bar { display: flex; align-items: center; gap: 10px; }
+  .auth-label { font-size: 12px; color: rgba(232,228,220,0.4); text-transform: uppercase; letter-spacing: 1px; }
+  .role-btn {
+    background: none; border: 1px solid rgba(232,201,126,0.3); color: #e8c97e;
+    padding: 5px 14px; border-radius: 20px; font-size: 12px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; letter-spacing: 0.5px; transition: all 0.2s;
+  }
+  .role-btn.active { background: #e8c97e; color: #0a0a0f; font-weight: 500; }
+  .role-btn:hover:not(.active) { background: rgba(232,201,126,0.1); }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #4caf72; margin-left: 8px; box-shadow: 0 0 6px #4caf72; }
+  .status-dot.offline { background: #cf4b4b; box-shadow: 0 0 6px #cf4b4b; }
+
+  .api-url-bar {
+    display: flex; align-items: center; gap: 8px; padding: 6px 2rem;
+    background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 11px; color: rgba(232,228,220,0.3); font-family: monospace;
+  }
+  .api-url-bar span { color: rgba(232,201,126,0.5); }
+
+  .toolbar {
+    display: flex; align-items: center; gap: 12px; padding: 1rem 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap;
+  }
+  .search-wrap { flex: 1; min-width: 200px; position: relative; }
+  .search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: rgba(232,228,220,0.3); font-size: 16px; }
+  .search-input {
+    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    color: #e8e4dc; padding: 9px 12px 9px 36px; border-radius: 8px; font-size: 14px;
+    font-family: 'DM Sans', sans-serif; outline: none; transition: border 0.2s;
+  }
+  .search-input:focus { border-color: rgba(232,201,126,0.4); }
+  .search-input::placeholder { color: rgba(232,228,220,0.25); }
+  .genre-select {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    color: #e8e4dc; padding: 9px 14px; border-radius: 8px; font-size: 13px;
+    font-family: 'DM Sans', sans-serif; outline: none; cursor: pointer;
+  }
+  .genre-select option { background: #1a1a24; }
+  .filter-btn {
+    background: rgba(232,201,126,0.08); border: 1px solid rgba(232,201,126,0.2);
+    color: #e8c97e; padding: 9px 16px; border-radius: 8px; font-size: 13px;
+    font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .filter-btn:hover { background: rgba(232,201,126,0.15); }
+  .filter-btn.active { background: #e8c97e; color: #0a0a0f; }
+
+  .main { padding: 2rem; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 2px; color: rgba(232,228,220,0.35); margin-bottom: 1.2rem; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+
+  .card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px; overflow: hidden; transition: transform 0.2s, border-color 0.2s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: rgba(232,201,126,0.25); }
+
+  .card-poster {
+    height: 260px; position: relative; overflow: hidden;
+    background: #111118; display: flex; align-items: center; justify-content: center;
+  }
+  .card-poster img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.3s;
+  }
+  .card:hover .card-poster img { transform: scale(1.04); }
+  .poster-fallback {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    width: 100%; height: 100%; gap: 8px;
+    font-size: 3rem;
+    color: rgba(232,228,220,0.15);
+  }
+  .poster-fallback span { font-size: 13px; color: rgba(232,228,220,0.2); }
+
+  .card-body { padding: 0.85rem; }
+  .card-title { font-size: 14px; font-weight: 500; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-desc { font-size: 11px; color: rgba(232,228,220,0.35); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-meta { display: flex; justify-content: space-between; align-items: center; }
+  .genre-tag {
+    font-size: 10px; padding: 2px 8px; border-radius: 10px;
+    background: rgba(232,201,126,0.1); color: #e8c97e; border: 1px solid rgba(232,201,126,0.2);
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .rating { font-size: 12px; color: #e8c97e; display: flex; align-items: center; gap: 3px; }
+  .year { font-size: 11px; color: rgba(232,228,220,0.3); margin-top: 2px; }
+  .admin-actions {
+    display: flex; gap: 6px; margin-top: 8px; padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .btn-sm {
+    flex: 1; padding: 5px; border-radius: 6px; font-size: 11px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: opacity 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 3px; border: none;
+  }
+  .btn-edit { background: rgba(65,130,210,0.15); color: #7aadee; border: 1px solid rgba(65,130,210,0.2) !important; }
+  .btn-delete { background: rgba(207,75,75,0.12); color: #e87a7a; border: 1px solid rgba(207,75,75,0.2) !important; }
+  .btn-sm:hover { opacity: 0.7; }
+
+  .fab {
+    position: fixed; bottom: 2rem; right: 2rem; width: 52px; height: 52px;
+    border-radius: 50%; background: #e8c97e; color: #0a0a0f; border: none;
+    font-size: 24px; cursor: pointer; display: none; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(232,201,126,0.35); transition: transform 0.2s; z-index: 200;
+  }
+  .fab:hover { transform: scale(1.08); }
+
+  .modal-bg {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+    z-index: 300; align-items: center; justify-content: center;
+  }
+  .modal-bg.open { display: flex; }
+  .modal { background: #13131a; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 2rem; width: 460px; max-width: 95vw; }
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #e8c97e; margin-bottom: 1.5rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: rgba(232,228,220,0.4); margin-bottom: 6px; }
+  .form-input {
+    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    color: #e8e4dc; padding: 9px 12px; border-radius: 8px; font-size: 14px;
+    font-family: 'DM Sans', sans-serif; outline: none; transition: border 0.2s;
+  }
+  .form-input:focus { border-color: rgba(232,201,126,0.5); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 1.5rem; }
+  .btn-primary {
+    flex: 1; padding: 10px; background: #e8c97e; color: #0a0a0f; border: none;
+    border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-cancel {
+    padding: 10px 20px; background: none; border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(232,228,220,0.5); border-radius: 8px; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  }
+
+  .poster-preview {
+    width: 100%; height: 120px; border-radius: 8px; object-fit: cover;
+    border: 1px solid rgba(255,255,255,0.08); margin-top: 6px; display: none;
+  }
+  .poster-hint { font-size: 11px; color: rgba(232,228,220,0.25); margin-top: 4px; }
+
+  .toast {
+    position: fixed; bottom: 5rem; right: 2rem; background: #1e1e28;
+    border: 1px solid rgba(255,255,255,0.1); color: #e8e4dc; padding: 10px 16px;
+    border-radius: 8px; font-size: 13px; z-index: 400; display: none;
+    align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .toast.show { display: flex; }
+  .toast.success { border-color: rgba(76,175,114,0.3); }
+  .toast.error { border-color: rgba(207,75,75,0.3); }
+
+  .empty-state { text-align: center; padding: 4rem 2rem; color: rgba(232,228,220,0.25); }
+  .empty-state i { font-size: 48px; margin-bottom: 1rem; display: block; }
+  .spinner { text-align: center; padding: 3rem; color: rgba(232,228,220,0.3); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">MovieTime</div>
+  <div class="auth-bar">
+    <span class="auth-label">Rol:</span>
+    <button class="role-btn" id="btn-user" onclick="setRole('user')">USER</button>
+    <button class="role-btn active" id="btn-admin" onclick="setRole('admin')">ADMIN</button>
+    <div class="status-dot" id="status-dot"></div>
+  </div>
+</div>
+
+<div class="api-url-bar">
+  <i class="ti ti-plug-connected"></i>
+  <span id="api-label">GET</span> http://localhost:8080/movies
+</div>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <i class="ti ti-search"></i>
+    <input class="search-input" id="search-input" placeholder="Film ara..." oninput="onSearch(this.value)">
+  </div>
+  <select class="genre-select" id="genre-select" onchange="onGenre(this.value)">
+    <option value="">Tüm Türler</option>
+    <option value="Action">Action</option>
+    <option value="Drama">Drama</option>
+    <option value="Comedy">Comedy</option>
+    <option value="Horror">Horror</option>
+    <option value="Sci-Fi">Sci-Fi</option>
+    <option value="Thriller">Thriller</option>
+    <option value="Romance">Romance</option>
+    <option value="Animation">Animation</option>
+  </select>
+  <button class="filter-btn" id="btn-top" onclick="toggleTop()">
+    <i class="ti ti-star"></i> Top 5
+  </button>
+  <button class="filter-btn" onclick="loadMovies()">
+    <i class="ti ti-refresh"></i> Yenile
+  </button>
+</div>
+
+<div class="main">
+  <div class="section-title" id="section-label">Tüm Filmler</div>
+  <div class="grid" id="grid">
+    <div class="spinner"><i class="ti ti-loader"></i> Yükleniyor...</div>
+  </div>
+</div>
+
+<button class="fab" id="fab-add" onclick="openModal()" title="Film Ekle">
+  <i class="ti ti-plus"></i>
+</button>
+
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Yeni Film Ekle</div>
+    <div class="form-group">
+      <label class="form-label">Film Adı</label>
+      <input class="form-input" id="f-title" placeholder="Örn: Inception" oninput="previewPoster(this.value)">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Afiş Önizleme</label>
+      <img class="poster-preview" id="poster-preview" alt="afiş önizleme">
+      <div class="poster-hint">Film adını yazınca otomatik afiş aranır</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Açıklama</label>
+      <input class="form-input" id="f-desc" placeholder="Film hakkında kısa açıklama...">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Tür</label>
+        <input class="form-input" id="f-genre" placeholder="Örn: Action">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Yıl</label>
+        <input class="form-input" id="f-year" type="number" placeholder="2024">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Puan (1–10)</label>
+      <input class="form-input" id="f-rating" type="number" step="0.1" min="1" max="10" placeholder="8.5">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="submitMovie()">Kaydet</button>
+      <button class="btn-cancel" onclick="closeModal()">İptal</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const BASE = 'http://localhost:8080';
+const OMDB_KEY = 'trilogy';
+let role = 'admin';
+let editId = null;
+let showTop = false;
+let posterDebounce = null;
+
+const FALLBACK = {
+  'Action': '🎯', 'Drama': '🎭', 'Comedy': '😂', 'Horror': '👻',
+  'Sci-Fi': '🚀', 'Thriller': '🔪', 'Romance': '❤️', 'Animation': '🎨'
+};
+
+const posterCache = {};
+
+async function fetchPoster(title) {
+  if (!title || title.length < 2) return null;
+  const key = title.toLowerCase().trim();
+  if (posterCache[key] !== undefined) return posterCache[key];
+  try {
+    const url = `https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${OMDB_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const poster = (data.Poster && data.Poster !== 'N/A') ? data.Poster : null;
+    posterCache[key] = poster;
+    return poster;
+  } catch {
+    return null;
+  }
+}
+
+function previewPoster(title) {
+  clearTimeout(posterDebounce);
+  const img = document.getElementById('poster-preview');
+  if (!title || title.length < 2) { img.style.display = 'none'; return; }
+  posterDebounce = setTimeout(async () => {
+    const url = await fetchPoster(title);
+    if (url) {
+      img.src = url;
+      img.style.display = 'block';
+    } else {
+      img.style.display = 'none';
+    }
+  }, 600);
+}
+
+function creds() {
+  return role === 'admin' ? btoa('admin:admin123') : btoa('user:1234');
+}
+
+function headers(isWrite) {
+  const h = { 'Authorization': 'Basic ' + creds() };
+  if (isWrite) h['Content-Type'] = 'application/json';
+  return h;
+}
+
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.className = 'toast show ' + type;
+  t.innerHTML = `<i class="ti ti-${type === 'success' ? 'check' : 'alert-circle'}"></i> ${msg}`;
+  setTimeout(() => t.className = 'toast', 2500);
+}
+
+function setRole(r) {
+  role = r;
+  document.getElementById('btn-user').classList.toggle('active', r === 'user');
+  document.getElementById('btn-admin').classList.toggle('active', r === 'admin');
+  document.getElementById('fab-add').style.display = r === 'admin' ? 'flex' : 'none';
+  loadMovies();
+}
+
+async function checkStatus() {
+  try {
+    const res = await fetch(BASE + '/movies', { headers: headers() });
+    document.getElementById('status-dot').className = 'status-dot' + (res.ok ? '' : ' offline');
+  } catch {
+    document.getElementById('status-dot').className = 'status-dot offline';
+  }
+}
+
+async function loadMovies() {
+  showTop = false;
+  document.getElementById('btn-top').classList.remove('active');
+  document.getElementById('section-label').textContent = 'Tüm Filmler';
+  document.getElementById('api-label').textContent = 'GET';
+  setGrid('<div class="spinner"><i class="ti ti-loader"></i> Yükleniyor...</div>');
+  try {
+    const res = await fetch(BASE + '/movies', { headers: headers() });
+    if (!res.ok) throw new Error(res.status);
+    const movies = await res.json();
+    await renderMovies(movies);
+  } catch {
+    setGrid(`<div class="empty-state"><i class="ti ti-wifi-off"></i><div>API'ye bağlanılamadı</div><div style="font-size:12px;margin-top:4px">Spring Boot uygulamanı başlatıp sayfayı yenile</div></div>`);
+  }
+}
+
+async function onSearch(val) {
+  if (!val.trim()) { loadMovies(); return; }
+  document.getElementById('genre-select').value = '';
+  document.getElementById('section-label').textContent = `"${val}" arama sonuçları`;
+  document.getElementById('api-label').textContent = 'GET';
+  try {
+    const res = await fetch(`${BASE}/movies/search?title=${encodeURIComponent(val)}`, { headers: headers() });
+    const movies = await res.json();
+    await renderMovies(movies);
+  } catch {}
+}
+
+async function onGenre(val) {
+  if (!val) { loadMovies(); return; }
+  document.getElementById('section-label').textContent = `Tür: ${val}`;
+  document.getElementById('api-label').textContent = 'GET';
+  try {
+    const res = await fetch(`${BASE}/movies/genre/${encodeURIComponent(val)}`, { headers: headers() });
+    const movies = await res.json();
+    await renderMovies(movies);
+  } catch {}
+}
+
+async function toggleTop() {
+  showTop = !showTop;
+  document.getElementById('btn-top').classList.toggle('active', showTop);
+  if (!showTop) { loadMovies(); return; }
+  document.getElementById('section-label').textContent = 'Top 5 — En Yüksek Puanlı';
+  document.getElementById('api-label').textContent = 'GET';
+  try {
+    const res = await fetch(`${BASE}/movies/top-rated`, { headers: headers() });
+    const movies = await res.json();
+    await renderMovies(movies);
+  } catch {}
+}
+
+async function renderMovies(movies) {
+  if (!movies || !movies.length) {
+    setGrid('<div class="empty-state"><i class="ti ti-movie-off"></i><div>Film bulunamadı</div></div>');
+    return;
+  }
+  const isAdmin = role === 'admin';
+  const posterPromises = movies.map(m => fetchPoster(m.title));
+  const posters = await Promise.all(posterPromises);
+
+  const html = movies.map((m, i) => {
+    const poster = posters[i];
+    const fallbackEmoji = FALLBACK[m.genre] || '🎞️';
+    const posterHtml = poster
+      ? `<img src="${poster}" alt="${esc(m.title)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+         <div class="poster-fallback" style="display:none"><i class="ti ti-photo-off" style="font-size:2rem"></i><span>Afiş yok</span></div>`
+      : `<div class="poster-fallback"><span style="font-size:3rem">${fallbackEmoji}</span><span>${esc(m.genre || '')}</span></div>`;
+
+    return `
+    <div class="card">
+      <div class="card-poster">${posterHtml}</div>
+      <div class="card-body">
+        <div class="card-title" title="${esc(m.title)}">${esc(m.title)}</div>
+        <div class="year">${m.releaseYear || '—'}</div>
+        <div class="card-meta">
+          <span class="genre-tag">${esc(m.genre || '—')}</span>
+          <span class="rating"><i class="ti ti-star-filled" style="font-size:11px"></i> ${m.rating != null ? Number(m.rating).toFixed(1) : '—'}</span>
+        </div>
+        ${isAdmin ? `
+        <div class="admin-actions">
+          <button class="btn-sm btn-edit" onclick='editMovie(${JSON.stringify(m).replace(/'/g,"&#39;")})'>
+            <i class="ti ti-pencil"></i> Düzenle
+          </button>
+          <button class="btn-sm btn-delete" onclick="deleteMovie(${m.id})">
+            <i class="ti ti-trash"></i> Sil
+          </button>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  setGrid(html);
+}
+
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function setGrid(html) {
+  document.getElementById('grid').innerHTML = html;
+}
+
+function openModal(m) {
+  editId = m ? m.id : null;
+  document.getElementById('modal-title').textContent = m ? 'Filmi Düzenle' : 'Yeni Film Ekle';
+  document.getElementById('f-title').value = m?.title || '';
+  document.getElementById('f-desc').value = m?.description || '';
+  document.getElementById('f-genre').value = m?.genre || '';
+  document.getElementById('f-year').value = m?.releaseYear || '';
+  document.getElementById('f-rating').value = m?.rating || '';
+  const img = document.getElementById('poster-preview');
+  img.style.display = 'none';
+  if (m?.title) previewPoster(m.title);
+  document.getElementById('modal-bg').classList.add('open');
+}
+
+function editMovie(m) { openModal(m); }
+
+function closeModal() {
+  document.getElementById('modal-bg').classList.remove('open');
+  editId = null;
+}
+
+async function submitMovie() {
+  const body = {
+    title: document.getElementById('f-title').value.trim(),
+    description: document.getElementById('f-desc').value.trim(),
+    genre: document.getElementById('f-genre').value.trim(),
+    releaseYear: parseInt(document.getElementById('f-year').value),
+    rating: parseFloat(document.getElementById('f-rating').value),
+  };
+  if (!body.title || !body.description || !body.genre) {
+    showToast('Tüm alanları doldur', 'error'); return;
+  }
+  try {
+    const url = editId ? `${BASE}/movies/${editId}` : `${BASE}/movies`;
+    const method = editId ? 'PUT' : 'POST';
+    document.getElementById('api-label').textContent = method;
+    const res = await fetch(url, { method, headers: headers(true), body: JSON.stringify(body) });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      const msg = Object.values(err).join(', ') || res.status;
+      showToast('Hata: ' + msg, 'error'); return;
+    }
+    showToast(editId ? 'Film güncellendi' : 'Film eklendi');
+    closeModal();
+    loadMovies();
+  } catch { showToast('Bağlantı hatası', 'error'); }
+}
+
+async function deleteMovie(id) {
+  if (!confirm('Bu filmi silmek istiyor musun?')) return;
+  document.getElementById('api-label').textContent = 'DELETE';
+  try {
+    const res = await fetch(`${BASE}/movies/${id}`, { method: 'DELETE', headers: headers() });
+    if (res.ok) { showToast('Film silindi'); loadMovies(); }
+    else showToast('Silinemedi: ' + res.status, 'error');
+  } catch { showToast('Bağlantı hatası', 'error'); }
+}
+
+document.getElementById('modal-bg').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+setRole('admin');
+checkStatus();
+setInterval(checkStatus, 10000);
+</script>
+</body>
+</html>
