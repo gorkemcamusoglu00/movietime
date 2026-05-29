@@ -38,10 +38,10 @@ public class SecurityConfig {
 
                         .requestMatchers("/h2-console/**").permitAll()
 
-                        // Herkes film listesini ve detayını görebilir
+
                         .requestMatchers(HttpMethod.GET, "/movies/**").hasAnyRole("USER", "ADMIN")
 
-                        // Sadece ADMIN film ekleyebilir, güncelleyebilir, silebilir
+
                         .requestMatchers(HttpMethod.POST, "/movies/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/movies/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/movies/**").hasRole("ADMIN")
