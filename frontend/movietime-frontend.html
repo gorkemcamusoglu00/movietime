@@ -10,26 +10,74 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: #0a0a0f; color: #e8e4dc; min-height: 100vh; }
 
+  /* LOGIN */
+  .login-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at 60% 40%, #1a1020 0%, #0a0a0f 70%);
+  }
+  .login-box {
+    width: 380px; background: #13131a; border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px; padding: 2.5rem; text-align: center;
+  }
+  .login-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 4px; color: #e8c97e; margin-bottom: 0.3rem; }
+  .login-sub { font-size: 12px; color: rgba(232,228,220,0.3); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2rem; }
+  .login-form { text-align: left; }
+  .login-label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: rgba(232,228,220,0.4); margin-bottom: 6px; }
+  .login-input {
+    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    color: #e8e4dc; padding: 11px 14px; border-radius: 8px; font-size: 14px;
+    font-family: 'DM Sans', sans-serif; outline: none; transition: border 0.2s; margin-bottom: 1rem;
+  }
+  .login-input:focus { border-color: rgba(232,201,126,0.5); }
+  .login-input::placeholder { color: rgba(232,228,220,0.2); }
+  .login-btn {
+    width: 100%; padding: 12px; background: #e8c97e; color: #0a0a0f; border: none;
+    border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: opacity 0.2s; margin-top: 0.5rem;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .login-btn:hover { opacity: 0.88; }
+  .login-error {
+    background: rgba(207,75,75,0.1); border: 1px solid rgba(207,75,75,0.25);
+    color: #e87a7a; padding: 9px 12px; border-radius: 8px; font-size: 13px;
+    margin-bottom: 1rem; display: none; align-items: center; gap: 8px;
+  }
+  .login-error.show { display: flex; }
+  .login-hint { font-size: 11px; color: rgba(232,228,220,0.2); margin-top: 1.5rem; line-height: 1.6; }
+  .login-hint b { color: rgba(232,201,126,0.5); font-weight: 400; }
+
+  /* APP */
+  .app-screen { display: none; }
+  .app-screen.show { display: block; }
+
   .header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 1.5rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.07);
-    background: rgba(10,10,15,0.95); position: sticky; top: 0; z-index: 100;
+    padding: 1.2rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.07);
+    background: rgba(10,10,15,0.97); position: sticky; top: 0; z-index: 100;
   }
-  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px; color: #e8c97e; }
-  .auth-bar { display: flex; align-items: center; gap: 10px; }
-  .auth-label { font-size: 12px; color: rgba(232,228,220,0.4); text-transform: uppercase; letter-spacing: 1px; }
-  .role-btn {
-    background: none; border: 1px solid rgba(232,201,126,0.3); color: #e8c97e;
-    padding: 5px 14px; border-radius: 20px; font-size: 12px; cursor: pointer;
-    font-family: 'DM Sans', sans-serif; letter-spacing: 0.5px; transition: all 0.2s;
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 3px; color: #e8c97e; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .user-badge {
+    display: flex; align-items: center; gap: 8px; padding: 5px 12px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px; font-size: 13px;
   }
-  .role-btn.active { background: #e8c97e; color: #0a0a0f; font-weight: 500; }
-  .role-btn:hover:not(.active) { background: rgba(232,201,126,0.1); }
-  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #4caf72; margin-left: 8px; box-shadow: 0 0 6px #4caf72; }
-  .status-dot.offline { background: #cf4b4b; box-shadow: 0 0 6px #cf4b4b; }
+  .user-badge .role-pill {
+    font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 500; letter-spacing: 0.5px;
+  }
+  .role-pill.admin { background: rgba(232,201,126,0.15); color: #e8c97e; border: 1px solid rgba(232,201,126,0.3); }
+  .role-pill.user { background: rgba(65,130,210,0.15); color: #7aadee; border: 1px solid rgba(65,130,210,0.3); }
+  .logout-btn {
+    background: none; border: 1px solid rgba(255,255,255,0.08); color: rgba(232,228,220,0.4);
+    padding: 5px 12px; border-radius: 20px; font-size: 12px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+  }
+  .logout-btn:hover { border-color: rgba(207,75,75,0.3); color: #e87a7a; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4caf72; box-shadow: 0 0 5px #4caf72; }
+  .status-dot.offline { background: #cf4b4b; box-shadow: 0 0 5px #cf4b4b; }
 
   .api-url-bar {
-    display: flex; align-items: center; gap: 8px; padding: 6px 2rem;
+    display: flex; align-items: center; gap: 8px; padding: 5px 2rem;
     background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.04);
     font-size: 11px; color: rgba(232,228,220,0.3); font-family: monospace;
   }
@@ -67,106 +115,52 @@
   .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 2px; color: rgba(232,228,220,0.35); margin-bottom: 1.2rem; }
 
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
-
   .card {
     background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
     border-radius: 10px; overflow: hidden; transition: transform 0.2s, border-color 0.2s;
   }
   .card:hover { transform: translateY(-4px); border-color: rgba(232,201,126,0.25); }
-
-  .card-poster {
-    height: 260px; position: relative; overflow: hidden;
-    background: #111118; display: flex; align-items: center; justify-content: center;
-  }
-  .card-poster img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform 0.3s;
-  }
+  .card-poster { height: 260px; position: relative; overflow: hidden; background: #111118; display: flex; align-items: center; justify-content: center; }
+  .card-poster img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
   .card:hover .card-poster img { transform: scale(1.04); }
-  .poster-fallback {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    width: 100%; height: 100%; gap: 8px;
-    font-size: 3rem;
-    color: rgba(232,228,220,0.15);
-  }
+  .poster-fallback { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; gap: 8px; color: rgba(232,228,220,0.15); }
   .poster-fallback span { font-size: 13px; color: rgba(232,228,220,0.2); }
-
   .card-body { padding: 0.85rem; }
   .card-title { font-size: 14px; font-weight: 500; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .card-desc { font-size: 11px; color: rgba(232,228,220,0.4); margin-bottom: 6px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .card-meta { display: flex; justify-content: space-between; align-items: center; }
-  .genre-tag {
-    font-size: 10px; padding: 2px 8px; border-radius: 10px;
-    background: rgba(232,201,126,0.1); color: #e8c97e; border: 1px solid rgba(232,201,126,0.2);
-    letter-spacing: 0.5px; text-transform: uppercase;
-  }
+  .genre-tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; background: rgba(232,201,126,0.1); color: #e8c97e; border: 1px solid rgba(232,201,126,0.2); letter-spacing: 0.5px; text-transform: uppercase; }
   .rating { font-size: 12px; color: #e8c97e; display: flex; align-items: center; gap: 3px; }
   .year { font-size: 11px; color: rgba(232,228,220,0.3); margin-top: 2px; }
-  .admin-actions {
-    display: flex; gap: 6px; margin-top: 8px; padding-top: 8px;
-    border-top: 1px solid rgba(255,255,255,0.05);
-  }
-  .btn-sm {
-    flex: 1; padding: 5px; border-radius: 6px; font-size: 11px; cursor: pointer;
-    font-family: 'DM Sans', sans-serif; transition: opacity 0.2s;
-    display: flex; align-items: center; justify-content: center; gap: 3px; border: none;
-  }
+  .admin-actions { display: flex; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.05); }
+  .btn-sm { flex: 1; padding: 5px; border-radius: 6px; font-size: 11px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; gap: 3px; border: none; }
   .btn-edit { background: rgba(65,130,210,0.15); color: #7aadee; border: 1px solid rgba(65,130,210,0.2) !important; }
   .btn-delete { background: rgba(207,75,75,0.12); color: #e87a7a; border: 1px solid rgba(207,75,75,0.2) !important; }
   .btn-sm:hover { opacity: 0.7; }
 
-  .fab {
-    position: fixed; bottom: 2rem; right: 2rem; width: 52px; height: 52px;
-    border-radius: 50%; background: #e8c97e; color: #0a0a0f; border: none;
-    font-size: 24px; cursor: pointer; display: none; align-items: center; justify-content: center;
-    box-shadow: 0 4px 20px rgba(232,201,126,0.35); transition: transform 0.2s; z-index: 200;
-  }
+  .fab { position: fixed; bottom: 2rem; right: 2rem; width: 52px; height: 52px; border-radius: 50%; background: #e8c97e; color: #0a0a0f; border: none; font-size: 24px; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(232,201,126,0.35); transition: transform 0.2s; z-index: 200; }
   .fab:hover { transform: scale(1.08); }
 
-  .modal-bg {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-    z-index: 300; align-items: center; justify-content: center;
-  }
+  .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 300; align-items: center; justify-content: center; }
   .modal-bg.open { display: flex; }
   .modal { background: #13131a; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 2rem; width: 460px; max-width: 95vw; }
   .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #e8c97e; margin-bottom: 1.5rem; }
   .form-group { margin-bottom: 1rem; }
   .form-label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: rgba(232,228,220,0.4); margin-bottom: 6px; }
-  .form-input {
-    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
-    color: #e8e4dc; padding: 9px 12px; border-radius: 8px; font-size: 14px;
-    font-family: 'DM Sans', sans-serif; outline: none; transition: border 0.2s;
-  }
+  .form-input { width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #e8e4dc; padding: 9px 12px; border-radius: 8px; font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; transition: border 0.2s; }
   .form-input:focus { border-color: rgba(232,201,126,0.5); }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .modal-actions { display: flex; gap: 10px; margin-top: 1.5rem; }
-  .btn-primary {
-    flex: 1; padding: 10px; background: #e8c97e; color: #0a0a0f; border: none;
-    border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer;
-    font-family: 'DM Sans', sans-serif; transition: opacity 0.2s;
-  }
+  .btn-primary { flex: 1; padding: 10px; background: #e8c97e; color: #0a0a0f; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s; }
   .btn-primary:hover { opacity: 0.85; }
-  .btn-cancel {
-    padding: 10px 20px; background: none; border: 1px solid rgba(255,255,255,0.1);
-    color: rgba(232,228,220,0.5); border-radius: 8px; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif;
-  }
-
-  .poster-preview {
-    width: 100%; height: 120px; border-radius: 8px; object-fit: cover;
-    border: 1px solid rgba(255,255,255,0.08); margin-top: 6px; display: none;
-  }
+  .btn-cancel { padding: 10px 20px; background: none; border: 1px solid rgba(255,255,255,0.1); color: rgba(232,228,220,0.5); border-radius: 8px; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .poster-preview { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(255,255,255,0.08); margin-top: 6px; display: none; }
   .poster-hint { font-size: 11px; color: rgba(232,228,220,0.25); margin-top: 4px; }
 
-  .toast {
-    position: fixed; bottom: 5rem; right: 2rem; background: #1e1e28;
-    border: 1px solid rgba(255,255,255,0.1); color: #e8e4dc; padding: 10px 16px;
-    border-radius: 8px; font-size: 13px; z-index: 400; display: none;
-    align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  }
+  .toast { position: fixed; bottom: 5rem; right: 2rem; background: #1e1e28; border: 1px solid rgba(255,255,255,0.1); color: #e8e4dc; padding: 10px 16px; border-radius: 8px; font-size: 13px; z-index: 400; display: none; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
   .toast.show { display: flex; }
   .toast.success { border-color: rgba(76,175,114,0.3); }
   .toast.error { border-color: rgba(207,75,75,0.3); }
-
   .empty-state { text-align: center; padding: 4rem 2rem; color: rgba(232,228,220,0.25); }
   .empty-state i { font-size: 48px; margin-bottom: 1rem; display: block; }
   .spinner { text-align: center; padding: 3rem; color: rgba(232,228,220,0.3); font-size: 13px; }
@@ -174,56 +168,91 @@
 </head>
 <body>
 
-<div class="header">
-  <div class="logo">MovieTime</div>
-  <div class="auth-bar">
-    <span class="auth-label">Rol:</span>
-    <button class="role-btn" id="btn-user" onclick="setRole('user')">USER</button>
-    <button class="role-btn active" id="btn-admin" onclick="setRole('admin')">ADMIN</button>
-    <div class="status-dot" id="status-dot"></div>
+<!-- LOGIN EKRANI -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">MovieTime</div>
+    <div class="login-sub">Film Yönetim Sistemi</div>
+    <div class="login-form">
+      <div class="login-error" id="login-error">
+        <i class="ti ti-alert-circle"></i>
+        <span id="login-error-msg">Kullanıcı adı veya şifre hatalı.</span>
+      </div>
+      <label class="login-label">Kullanıcı Adı</label>
+      <input class="login-input" id="login-username" placeholder="user veya admin" autocomplete="username">
+      <label class="login-label">Şifre</label>
+      <input class="login-input" id="login-password" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="login-btn" onclick="doLogin()" id="login-btn">
+        <i class="ti ti-login"></i> Giriş Yap
+      </button>
+    </div>
+    <div class="login-hint">
+      <b>user</b> / 1234 &nbsp;·&nbsp; <b>admin</b> / admin123
+    </div>
   </div>
 </div>
 
-<div class="api-url-bar">
-  <i class="ti ti-plug-connected"></i>
-  <span id="api-label">GET</span> http://localhost:8080/movies
-</div>
+<!-- ANA EKRAN -->
+<div class="app-screen" id="app-screen">
 
-<div class="toolbar">
-  <div class="search-wrap">
-    <i class="ti ti-search"></i>
-    <input class="search-input" id="search-input" placeholder="Film ara..." oninput="onSearch(this.value)">
+  <div class="header">
+    <div class="logo">MovieTime</div>
+    <div class="header-right">
+      <div class="status-dot" id="status-dot"></div>
+      <div class="user-badge">
+        <i class="ti ti-user" style="font-size:14px;color:rgba(232,228,220,0.4)"></i>
+        <span id="display-username" style="font-size:13px"></span>
+        <span class="role-pill" id="display-role"></span>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">
+        <i class="ti ti-logout"></i> Çıkış
+      </button>
+    </div>
   </div>
-  <select class="genre-select" id="genre-select" onchange="onGenre(this.value)">
-    <option value="">Tüm Türler</option>
-    <option value="Action">Action</option>
-    <option value="Drama">Drama</option>
-    <option value="Comedy">Comedy</option>
-    <option value="Horror">Horror</option>
-    <option value="Sci-Fi">Sci-Fi</option>
-    <option value="Thriller">Thriller</option>
-    <option value="Romance">Romance</option>
-    <option value="Animation">Animation</option>
-  </select>
-  <button class="filter-btn" id="btn-top" onclick="toggleTop()">
-    <i class="ti ti-star"></i> Top 5
+
+  <div class="api-url-bar">
+    <i class="ti ti-plug-connected"></i>
+    <span id="api-label">GET</span> http://localhost:8080/movies
+  </div>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input class="search-input" id="search-input" placeholder="Film ara..." oninput="onSearch(this.value)">
+    </div>
+    <select class="genre-select" id="genre-select" onchange="onGenre(this.value)">
+      <option value="">Tüm Türler</option>
+      <option value="Action">Action</option>
+      <option value="Drama">Drama</option>
+      <option value="Comedy">Comedy</option>
+      <option value="Horror">Horror</option>
+      <option value="Sci-Fi">Sci-Fi</option>
+      <option value="Thriller">Thriller</option>
+      <option value="Romance">Romance</option>
+      <option value="Animation">Animation</option>
+    </select>
+    <button class="filter-btn" id="btn-top" onclick="toggleTop()">
+      <i class="ti ti-star"></i> Top 5
+    </button>
+    <button class="filter-btn" onclick="loadMovies()">
+      <i class="ti ti-refresh"></i> Yenile
+    </button>
+  </div>
+
+  <div class="main">
+    <div class="section-title" id="section-label">Tüm Filmler</div>
+    <div class="grid" id="grid">
+      <div class="spinner"><i class="ti ti-loader"></i> Yükleniyor...</div>
+    </div>
+  </div>
+
+  <button class="fab" id="fab-add" onclick="openModal()" title="Film Ekle">
+    <i class="ti ti-plus"></i>
   </button>
-  <button class="filter-btn" onclick="loadMovies()">
-    <i class="ti ti-refresh"></i> Yenile
-  </button>
+
 </div>
 
-<div class="main">
-  <div class="section-title" id="section-label">Tüm Filmler</div>
-  <div class="grid" id="grid">
-    <div class="spinner"><i class="ti ti-loader"></i> Yükleniyor...</div>
-  </div>
-</div>
-
-<button class="fab" id="fab-add" onclick="openModal()" title="Film Ekle">
-  <i class="ti ti-plus"></i>
-</button>
-
+<!-- FILM MODAL -->
 <div class="modal-bg" id="modal-bg">
   <div class="modal">
     <div class="modal-title" id="modal-title">Yeni Film Ekle</div>
@@ -266,32 +295,110 @@
 <script>
 const BASE = 'http://localhost:8080';
 const OMDB_KEY = 'trilogy';
-let role = 'admin';
+let currentUser = null;
+let currentRole = null;
 let editId = null;
 let showTop = false;
 let posterDebounce = null;
-
-const FALLBACK = {
-  'Action': '🎯', 'Drama': '🎭', 'Comedy': '😂', 'Horror': '👻',
-  'Sci-Fi': '🚀', 'Thriller': '🔪', 'Romance': '❤️', 'Animation': '🎨'
-};
-
 const posterCache = {};
+
+const FALLBACK = { 'Action':'🎯','Drama':'🎭','Comedy':'😂','Horror':'👻','Sci-Fi':'🚀','Thriller':'🔪','Romance':'❤️','Animation':'🎨' };
+
+async function doLogin() {
+  const username = document.getElementById('login-username').value.trim();
+  const password = document.getElementById('login-password').value;
+  if (!username || !password) {
+    showLoginError('Kullanıcı adı ve şifre gerekli.'); return;
+  }
+  const btn = document.getElementById('login-btn');
+  btn.innerHTML = '<i class="ti ti-loader"></i> Bağlanıyor...';
+  btn.disabled = true;
+  try {
+    const res = await fetch(BASE + '/movies', {
+      headers: { 'Authorization': 'Basic ' + btoa(username + ':' + password) }
+    });
+    if (res.ok || res.status === 403) {
+      currentUser = username;
+      currentRole = (username === 'admin') ? 'admin' : 'user';
+      hideLoginError();
+      showApp();
+    } else if (res.status === 401) {
+      showLoginError('Kullanıcı adı veya şifre hatalı.');
+    } else {
+      showLoginError('Sunucuya bağlanılamadı. Spring Boot çalışıyor mu?');
+    }
+  } catch {
+    showLoginError('API\'ye ulaşılamadı. Spring Boot uygulamanı başlat.');
+  }
+  btn.innerHTML = '<i class="ti ti-login"></i> Giriş Yap';
+  btn.disabled = false;
+}
+
+function showLoginError(msg) {
+  const el = document.getElementById('login-error');
+  document.getElementById('login-error-msg').textContent = msg;
+  el.classList.add('show');
+}
+
+function hideLoginError() {
+  document.getElementById('login-error').classList.remove('show');
+}
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').classList.add('show');
+  document.getElementById('display-username').textContent = currentUser;
+  const pill = document.getElementById('display-role');
+  pill.textContent = currentRole.toUpperCase();
+  pill.className = 'role-pill ' + currentRole;
+  document.getElementById('fab-add').style.display = currentRole === 'admin' ? 'flex' : 'none';
+  loadMovies();
+  checkStatus();
+}
+
+function doLogout() {
+  currentUser = null;
+  currentRole = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app-screen').classList.remove('show');
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+  document.getElementById('grid').innerHTML = '';
+}
+
+function creds() { return btoa(currentUser + ':' + document.getElementById('login-password').value || getStoredPass()); }
+
+function authHeader(isWrite) {
+  const h = { 'Authorization': 'Basic ' + btoa(currentUser + ':' + getPass()) };
+  if (isWrite) h['Content-Type'] = 'application/json';
+  return h;
+}
+
+function getPass() {
+  const p = document.getElementById('login-password').value;
+  return p || (currentUser === 'admin' ? 'admin123' : '1234');
+}
+
+async function checkStatus() {
+  try {
+    const res = await fetch(BASE + '/movies', { headers: authHeader() });
+    document.getElementById('status-dot').className = 'status-dot' + (res.ok ? '' : ' offline');
+  } catch {
+    document.getElementById('status-dot').className = 'status-dot offline';
+  }
+}
 
 async function fetchPoster(title) {
   if (!title || title.length < 2) return null;
   const key = title.toLowerCase().trim();
   if (posterCache[key] !== undefined) return posterCache[key];
   try {
-    const url = `https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${OMDB_KEY}`;
-    const res = await fetch(url);
+    const res = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${OMDB_KEY}`);
     const data = await res.json();
     const poster = (data.Poster && data.Poster !== 'N/A') ? data.Poster : null;
     posterCache[key] = poster;
     return poster;
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 
 function previewPoster(title) {
@@ -300,23 +407,9 @@ function previewPoster(title) {
   if (!title || title.length < 2) { img.style.display = 'none'; return; }
   posterDebounce = setTimeout(async () => {
     const url = await fetchPoster(title);
-    if (url) {
-      img.src = url;
-      img.style.display = 'block';
-    } else {
-      img.style.display = 'none';
-    }
+    if (url) { img.src = url; img.style.display = 'block'; }
+    else { img.style.display = 'none'; }
   }, 600);
-}
-
-function creds() {
-  return role === 'admin' ? btoa('admin:admin123') : btoa('user:1234');
-}
-
-function headers(isWrite) {
-  const h = { 'Authorization': 'Basic ' + creds() };
-  if (isWrite) h['Content-Type'] = 'application/json';
-  return h;
 }
 
 function showToast(msg, type = 'success') {
@@ -326,23 +419,6 @@ function showToast(msg, type = 'success') {
   setTimeout(() => t.className = 'toast', 2500);
 }
 
-function setRole(r) {
-  role = r;
-  document.getElementById('btn-user').classList.toggle('active', r === 'user');
-  document.getElementById('btn-admin').classList.toggle('active', r === 'admin');
-  document.getElementById('fab-add').style.display = r === 'admin' ? 'flex' : 'none';
-  loadMovies();
-}
-
-async function checkStatus() {
-  try {
-    const res = await fetch(BASE + '/movies', { headers: headers() });
-    document.getElementById('status-dot').className = 'status-dot' + (res.ok ? '' : ' offline');
-  } catch {
-    document.getElementById('status-dot').className = 'status-dot offline';
-  }
-}
-
 async function loadMovies() {
   showTop = false;
   document.getElementById('btn-top').classList.remove('active');
@@ -350,12 +426,12 @@ async function loadMovies() {
   document.getElementById('api-label').textContent = 'GET';
   setGrid('<div class="spinner"><i class="ti ti-loader"></i> Yükleniyor...</div>');
   try {
-    const res = await fetch(BASE + '/movies', { headers: headers() });
+    const res = await fetch(BASE + '/movies', { headers: authHeader() });
     if (!res.ok) throw new Error(res.status);
     const movies = await res.json();
     await renderMovies(movies);
   } catch {
-    setGrid(`<div class="empty-state"><i class="ti ti-wifi-off"></i><div>API'ye bağlanılamadı</div><div style="font-size:12px;margin-top:4px">Spring Boot uygulamanı başlatıp sayfayı yenile</div></div>`);
+    setGrid(`<div class="empty-state"><i class="ti ti-wifi-off"></i><div>API'ye bağlanılamadı</div></div>`);
   }
 }
 
@@ -365,7 +441,7 @@ async function onSearch(val) {
   document.getElementById('section-label').textContent = `"${val}" arama sonuçları`;
   document.getElementById('api-label').textContent = 'GET';
   try {
-    const res = await fetch(`${BASE}/movies/search?title=${encodeURIComponent(val)}`, { headers: headers() });
+    const res = await fetch(`${BASE}/movies/search?title=${encodeURIComponent(val)}`, { headers: authHeader() });
     const movies = await res.json();
     await renderMovies(movies);
   } catch {}
@@ -376,7 +452,7 @@ async function onGenre(val) {
   document.getElementById('section-label').textContent = `Tür: ${val}`;
   document.getElementById('api-label').textContent = 'GET';
   try {
-    const res = await fetch(`${BASE}/movies/genre/${encodeURIComponent(val)}`, { headers: headers() });
+    const res = await fetch(`${BASE}/movies/genre/${encodeURIComponent(val)}`, { headers: authHeader() });
     const movies = await res.json();
     await renderMovies(movies);
   } catch {}
@@ -389,7 +465,7 @@ async function toggleTop() {
   document.getElementById('section-label').textContent = 'Top 5 — En Yüksek Puanlı';
   document.getElementById('api-label').textContent = 'GET';
   try {
-    const res = await fetch(`${BASE}/movies/top-rated`, { headers: headers() });
+    const res = await fetch(`${BASE}/movies/top-rated`, { headers: authHeader() });
     const movies = await res.json();
     await renderMovies(movies);
   } catch {}
@@ -400,10 +476,8 @@ async function renderMovies(movies) {
     setGrid('<div class="empty-state"><i class="ti ti-movie-off"></i><div>Film bulunamadı</div></div>');
     return;
   }
-  const isAdmin = role === 'admin';
-  const posterPromises = movies.map(m => fetchPoster(m.title));
-  const posters = await Promise.all(posterPromises);
-
+  const isAdmin = currentRole === 'admin';
+  const posters = await Promise.all(movies.map(m => fetchPoster(m.title)));
   const html = movies.map((m, i) => {
     const poster = posters[i];
     const fallbackEmoji = FALLBACK[m.genre] || '🎞️';
@@ -411,7 +485,6 @@ async function renderMovies(movies) {
       ? `<img src="${poster}" alt="${esc(m.title)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
          <div class="poster-fallback" style="display:none"><i class="ti ti-photo-off" style="font-size:2rem"></i><span>Afiş yok</span></div>`
       : `<div class="poster-fallback"><span style="font-size:3rem">${fallbackEmoji}</span><span>${esc(m.genre || '')}</span></div>`;
-
     return `
     <div class="card">
       <div class="card-poster">${posterHtml}</div>
@@ -443,9 +516,7 @@ function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function setGrid(html) {
-  document.getElementById('grid').innerHTML = html;
-}
+function setGrid(html) { document.getElementById('grid').innerHTML = html; }
 
 function openModal(m) {
   editId = m ? m.id : null;
@@ -462,11 +533,7 @@ function openModal(m) {
 }
 
 function editMovie(m) { openModal(m); }
-
-function closeModal() {
-  document.getElementById('modal-bg').classList.remove('open');
-  editId = null;
-}
+function closeModal() { document.getElementById('modal-bg').classList.remove('open'); editId = null; }
 
 async function submitMovie() {
   const body = {
@@ -476,22 +543,18 @@ async function submitMovie() {
     releaseYear: parseInt(document.getElementById('f-year').value),
     rating: parseFloat(document.getElementById('f-rating').value),
   };
-  if (!body.title || !body.description || !body.genre) {
-    showToast('Tüm alanları doldur', 'error'); return;
-  }
+  if (!body.title || !body.description || !body.genre) { showToast('Tüm alanları doldur', 'error'); return; }
   try {
     const url = editId ? `${BASE}/movies/${editId}` : `${BASE}/movies`;
     const method = editId ? 'PUT' : 'POST';
     document.getElementById('api-label').textContent = method;
-    const res = await fetch(url, { method, headers: headers(true), body: JSON.stringify(body) });
+    const res = await fetch(url, { method, headers: authHeader(true), body: JSON.stringify(body) });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      const msg = Object.values(err).join(', ') || res.status;
-      showToast('Hata: ' + msg, 'error'); return;
+      showToast('Hata: ' + (Object.values(err).join(', ') || res.status), 'error'); return;
     }
     showToast(editId ? 'Film güncellendi' : 'Film eklendi');
-    closeModal();
-    loadMovies();
+    closeModal(); loadMovies();
   } catch { showToast('Bağlantı hatası', 'error'); }
 }
 
@@ -499,19 +562,13 @@ async function deleteMovie(id) {
   if (!confirm('Bu filmi silmek istiyor musun?')) return;
   document.getElementById('api-label').textContent = 'DELETE';
   try {
-    const res = await fetch(`${BASE}/movies/${id}`, { method: 'DELETE', headers: headers() });
+    const res = await fetch(`${BASE}/movies/${id}`, { method: 'DELETE', headers: authHeader() });
     if (res.ok) { showToast('Film silindi'); loadMovies(); }
     else showToast('Silinemedi: ' + res.status, 'error');
   } catch { showToast('Bağlantı hatası', 'error'); }
 }
 
-document.getElementById('modal-bg').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-
-setRole('admin');
-checkStatus();
-setInterval(checkStatus, 10000);
+document.getElementById('modal-bg').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 </script>
 </body>
 </html>
